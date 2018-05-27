@@ -1,0 +1,1 @@
+http://feeds.site.example.com.invalid/news/rss.xml.invalid

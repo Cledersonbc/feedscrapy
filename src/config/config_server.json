@@ -1,0 +1,6 @@
+{
+	"server": "<SMTPSERVER>",
+	"port": "<PORT>",
+	"user": "<USER>",
+	"password": "<PASSWORD>"
+}

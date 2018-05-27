@@ -1,0 +1,7 @@
+{
+	"maxfeed": 5,
+	"clock": 15,
+	"template_name": "basic.html",
+	"type_search": 0,
+	"maxlog_length": 500
+}
