@@ -19,7 +19,7 @@ CLOCK = 30
 TEMPLATE_NAME = 'basic.html'
 TYPE_SEARCH = 0
 MAXLOG_LENGTH = 500
-
+CUR_PATH = os.path.dirname(__file__)
 
 def generic_read_item(path):
     """
@@ -85,7 +85,7 @@ def load_template():
     :return: None
     """
     try:
-        path = os.path.join('templates', TEMPLATE_NAME)
+        path = os.path.join(CUR_PATH, 'templates', TEMPLATE_NAME)
         with open(path, 'r') as template:
             content = template.read()
             template.close()
@@ -103,7 +103,7 @@ def write_output(entries):
     :return: None
     """
     try:
-        path = 'output'
+        path = os.path.join(CUR_PATH, 'output')
         if not os.path.exists(path):
             os.makedirs(path)
 
@@ -173,7 +173,7 @@ def control_log():
     This function control the log file length.
     :return:
     """
-    log_path = os.path.join('log', 'last_feed.log')
+    log_path = os.path.join(CUR_PATH, 'log', 'last_feed.log')
     cur_length_log = os.path.getsize(log_path)/10E6  # 1 MB
 
     if cur_length_log > MAXLOG_LENGTH:
@@ -186,7 +186,7 @@ def filter_entries(entries):
     :param entries: the news to be sent
     :return: filtered news
     """
-    path = os.path.join('log', 'last_feed.log')
+    path = os.path.join(CUR_PATH, 'log', 'last_feed.log')
     if not os.path.exists(path):
         titles = ''
         # List to String
@@ -226,7 +226,7 @@ def app_config():
     The main configurations are loaded here from the app_config.json.
     :return: None
     """
-    path_config = os.path.join('config', 'app_config.json')
+    path_config = os.path.join(CUR_PATH, 'config', 'app_config.json')
     data = {}
     try:
         with open(path_config, 'rb') as config_file:
@@ -247,14 +247,14 @@ def app_config():
 def main():
     # Checking
     print('[INFO]\tInicializando...')
-    feeds_path = os.path.join('input', 'feeds.txt')
+    feeds_path = os.path.join(CUR_PATH, 'input', 'feeds.txt')
     feeds = generic_read_item(feeds_path)
     if len(feeds) == 0:
         print('Nenhum feed encontrado em "%s"' % os.path.basename(feeds_path))
         exit(0)
     print('[OK]\tEncontrado', os.path.basename(feeds_path))
 
-    keyword_list_path = os.path.join('input', 'keyword_list.txt')
+    keyword_list_path = os.path.join(CUR_PATH, 'input', 'keyword_list.txt')
     keyword_list = generic_read_item(keyword_list_path)
     if len(keyword_list) == 0:
         print('[ERR]\tNenhuma palavra-chave encontrada em "%s"' % os.path.basename(keyword_list_path))
@@ -262,12 +262,12 @@ def main():
     print('[OK]\tEncontrado', os.path.basename(keyword_list_path))
 
     print('[INFO]\tLendo configuração do servidor SMTP...')
-    path_config = os.path.join('config', 'config_server.json')
+    path_config = os.path.join(CUR_PATH, 'config', 'config_server.json')
     server = create_server(path_config)
     print('[OK]\tEncontrado configurações em', os.path.basename(path_config))
 
     print('[INFO]\tLendo lista de e-mails')
-    emails_path = os.path.join('input', 'emails.txt')
+    emails_path = os.path.join(CUR_PATH, 'input', 'emails.txt')
     email_list = generic_read_item(emails_path)
     if len(email_list) == 0:
         print('Nenhum e-mail encontrado em "%s"' % os.path.basename(emails_path))
@@ -296,7 +296,7 @@ def main():
             fd_email = feedmail.Email()
             fd_email.set_addr_from(server.user)
             fd_email.set_subject('Feedscrapy - Últimas notícias')
-            content_path = os.path.join('output', 'content.html')
+            content_path = os.path.join(CUR_PATH, 'output', 'content.html')
             fd_email.attach_content(generic_read_content(content_path))
 
             for email in email_list:
